@@ -1,4 +1,4 @@
-package com.skillbranch.devintensive.extensions
+package ru.skillbranch.devintensive.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -14,7 +14,7 @@ fun Date.format(pattern:String = "HH:mm:ss dd.MM.yy"):String{
     return dateFormat.format(this)
 }
 
-fun Date.add(value:Int, units:TimeUnits):Date{
+fun Date.add(value:Int, units: TimeUnits):Date{
     var time = this.time
     time += when(units){
         TimeUnits.SECOND -> value* SECOND
@@ -30,28 +30,28 @@ fun Date.humanizeDiff():String{
     val diff:Long = Date().time-this.time
     when(abs(diff)){
         0L -> return "прямо сейчас"
-        in SECOND..MINUTE- SECOND -> {
+        in SECOND..MINUTE - SECOND -> {
             return if(diff<0){
                 "через ${TimeUnits.SECOND.plural(abs(diff/ SECOND))}"
             }else{
                 "${TimeUnits.SECOND.plural(abs(diff/ SECOND))} назад"
             }
         }
-        in MINUTE..HOUR- MINUTE -> {
+        in MINUTE..HOUR - MINUTE -> {
             return if(diff<0){
                 "через ${TimeUnits.MINUTE.plural(abs(diff/ MINUTE))}"
             }else{
                 "${TimeUnits.MINUTE.plural(abs(diff/ MINUTE))} назад"
             }
         }
-        in HOUR..DAY- HOUR -> {
+        in HOUR..DAY - HOUR -> {
             return if(diff<0){
                 "через ${TimeUnits.HOUR.plural(abs(diff/ HOUR))}"
             }else{
                 "${TimeUnits.HOUR.plural(abs(diff/ HOUR))} назад"
             }
         }
-        in DAY..365*DAY -> {
+        in DAY..365* DAY -> {
             return if(diff<0){
                 "через ${TimeUnits.DAY.plural(abs(diff/ DAY))}"
             }else{

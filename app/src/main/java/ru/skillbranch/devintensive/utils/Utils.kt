@@ -1,4 +1,4 @@
-package com.skillbranch.devintensive.utils
+package ru.skillbranch.devintensive.utils
 
 import android.service.voice.AlwaysOnHotwordDetector
 

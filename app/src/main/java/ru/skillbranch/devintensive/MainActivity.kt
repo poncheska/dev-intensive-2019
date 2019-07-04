@@ -1,7 +1,8 @@
-package com.skillbranch.devintensive
+package ru.skillbranch.devintensive
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.skillbranch.devintensive.R
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.skillbranch.devintensive.extensions
+package ru.skillbranch.devintensive.extensions
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
