@@ -11,7 +11,9 @@ object Utils{
     }
 
     fun toInitials(firstName:String?, lastName:String?):String?{
-        return firstName?.getOrNull(0 )?.toString() + lastName?.getOrNull(0)?.toString()
+        var str:String = if(firstName==null||firstName.trim()=="") "" else {Character.toUpperCase(firstName[0]).toString()} +
+                if(lastName==null||lastName.trim()=="") "" else {Character.toUpperCase(lastName[0]).toString()}
+        return if(str.trim()=="") null else str
     }
 
     fun transliteration(payload: String, divider:String = " "):String{

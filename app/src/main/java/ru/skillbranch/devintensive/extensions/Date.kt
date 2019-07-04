@@ -29,29 +29,50 @@ fun Date.add(value:Int, units: TimeUnits):Date{
 fun Date.humanizeDiff():String{
     val diff:Long = Date().time-this.time
     when(abs(diff)){
-        0L -> return "прямо сейчас"
-        in SECOND..MINUTE - SECOND -> {
+        in 0L..SECOND -> return "только что"
+        in SECOND..45* SECOND -> {
             return if(diff<0){
-                "через ${TimeUnits.SECOND.plural(abs(diff/ SECOND))}"
+                "через несколько секунд"
             }else{
-                "${TimeUnits.SECOND.plural(abs(diff/ SECOND))} назад"
+                "несколько секунд назад"
             }
         }
-        in MINUTE..HOUR - MINUTE -> {
+        in 45*SECOND..75* SECOND -> {
+            return if(diff<0){
+                "через минуту"
+            }else{
+                "минуту назад"
+            }
+        }
+        in 75* SECOND..45* MINUTE -> {
             return if(diff<0){
                 "через ${TimeUnits.MINUTE.plural(abs(diff/ MINUTE))}"
             }else{
                 "${TimeUnits.MINUTE.plural(abs(diff/ MINUTE))} назад"
             }
         }
-        in HOUR..DAY - HOUR -> {
+        in 45* MINUTE..75* MINUTE -> {
+            return if(diff<0){
+                "через час"
+            }else{
+                "час назад"
+            }
+        }
+        in 75* MINUTE..22*HOUR -> {
             return if(diff<0){
                 "через ${TimeUnits.HOUR.plural(abs(diff/ HOUR))}"
             }else{
                 "${TimeUnits.HOUR.plural(abs(diff/ HOUR))} назад"
             }
         }
-        in DAY..365* DAY -> {
+        in 22*HOUR..26*HOUR -> {
+            return if(diff<0){
+                "через день"
+            }else{
+                "день назад"
+            }
+        }
+        in 26* HOUR..360* DAY -> {
             return if(diff<0){
                 "через ${TimeUnits.DAY.plural(abs(diff/ DAY))}"
             }else{
