@@ -6,13 +6,13 @@ object Utils{
     fun parseFullName(fullName:String?):Pair<String?,String?>{
         val parts:List<String>? = fullName?.split(" ")
         val firstName = if(parts?.getOrNull(0)!="")parts?.getOrNull(0) else null
-        val lastName = if(parts?.getOrNull(1)!="")parts?.getOrNull(0) else null
+        val lastName = if(parts?.getOrNull(1)!="")parts?.getOrNull(1) else null
         return firstName to lastName
     }
 
     fun toInitials(firstName:String?, lastName:String?):String?{
         var str:String = if(firstName==null||firstName.trim()=="") "" else {Character.toUpperCase(firstName[0]).toString()} +
-                if(lastName==null||lastName.trim()=="") "" else {Character.toUpperCase(lastName[1]).toString()}
+                if(lastName==null||lastName.trim()=="") "" else {Character.toUpperCase(lastName[0]).toString()}
         return if(str.trim()=="") null else str
     }
 
