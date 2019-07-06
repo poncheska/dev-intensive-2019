@@ -12,7 +12,7 @@ object Utils{
 
     fun toInitials(firstName:String?, lastName:String?):String?{
         var str:String = if(firstName==null||firstName.trim()=="") "" else {Character.toUpperCase(firstName[0]).toString()} +
-                if(lastName==null||lastName.trim()=="") "" else {Character.toUpperCase(lastName[0]).toString()}
+                if(lastName==null||lastName.trim()=="") "" else {Character.toUpperCase(lastName[1]).toString()}
         return if(str.trim()=="") null else str
     }
 
