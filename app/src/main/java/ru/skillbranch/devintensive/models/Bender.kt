@@ -15,7 +15,7 @@ class Bender(var status:Status = Status.NORMAL,
     fun listenAnswer(answer:String):Pair<String,Triple<Int,Int,Int>>{
 
         return if(question.answers.contains(answer)){
-            question = question.nextQueation()
+            question = question.nextQuestion()
             "Отлично - ты справился\n${question.question}" to status.color
         }else{
             status = status.nextStatus()
@@ -40,25 +40,25 @@ class Bender(var status:Status = Status.NORMAL,
 
     enum class Question(val question:String, val answers:List<String>){
         NAME("Как меня зовут?", listOf("бендер", "bender")){
-            override fun nextQueation(): Question = PROFESSION
+            override fun nextQuestion(): Question = PROFESSION
         },
         PROFESSION("Назови мою профессию?", listOf("сгибальщик", "bender")){
-            override fun nextQueation(): Question = MATERIAL
+            override fun nextQuestion(): Question = MATERIAL
         },
         MATERIAL("Из чего я сделан?", listOf("металл", "дерево", "metal", "iron", "wood")){
-            override fun nextQueation(): Question = BDAY
+            override fun nextQuestion(): Question = BDAY
         },
         BDAY("Когда меня создали?", listOf("2993")){
-            override fun nextQueation(): Question = SERIAL
+            override fun nextQuestion(): Question = SERIAL
         },
         SERIAL("Мой серийный номер?", listOf("2716057")){
-            override fun nextQueation(): Question = IDLE
+            override fun nextQuestion(): Question = IDLE
         },
         IDLE("На этом все, вопросов больше нет", listOf()){
-            override fun nextQueation(): Question = IDLE
+            override fun nextQuestion(): Question = IDLE
         };
 
-        abstract fun nextQueation():Question
+        abstract fun nextQuestion():Question
     }
 
 }
