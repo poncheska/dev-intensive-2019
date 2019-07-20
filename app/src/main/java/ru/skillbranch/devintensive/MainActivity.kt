@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Log.d("M_MainActivity","onDestroy")
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+    override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putString("STATUS",benderObj.status.name)
         outState?.putString("QUESTION",benderObj.question.name)
