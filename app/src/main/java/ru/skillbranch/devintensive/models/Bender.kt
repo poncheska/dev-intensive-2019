@@ -1,5 +1,7 @@
 package ru.skillbranch.devintensive.models
 
+import android.util.Log
+
 class Bender(var status:Status = Status.NORMAL,
              var question: Question = Question.NAME){
 
@@ -12,20 +14,54 @@ class Bender(var status:Status = Status.NORMAL,
         Question.IDLE-> Question.IDLE.question
     }
 
-    fun listenAnswer(answer:String):Pair<String,Triple<Int,Int,Int>>{
+    fun validation(answer: String):Pair<Boolean,String> = when(question){
+        Question.NAME -> {
+            val valid = answer[0].isUpperCase()
+            valid to "Имя должно начинаться с заглавной буквы"
+        }
 
-        return if(question.answers.contains(answer)){
-            question = question.nextQuestion()
-            "Отлично - ты справился\n${question.question}" to status.color
-        }else{
-            if(status == Status.CRITICAL){
-                question = Question.NAME
-                status = Status.NORMAL
-                "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
-            }else {
-                status = status.nextStatus()
-                "Это неправильный ответ\n${question.question}" to status.color
+        Question.PROFESSION -> {
+            val valid = answer[0].isLowerCase()
+            valid to "Профессия должна начинаться со строчной буквы"
+        }
+
+        Question.MATERIAL -> {
+            val valid = !answer.matches(Regex(".*\\d+.*"))
+            valid to "Материал не должен содержать цифр"
+        }
+
+        Question.BDAY -> {
+            val valid = answer.matches(Regex("\\d+"))
+            valid to "Год моего рождения должен содержать только цифры"
+        }
+
+        Question.SERIAL -> {
+            val valid = answer.length == 7 && answer.matches(Regex("\\d+"))
+            valid to "Серийный номер содержит только цифры, и их 7"
+        }
+
+        Question.IDLE -> true to ""
+
+    }
+
+    fun listenAnswer(answer:String):Pair<String,Triple<Int,Int,Int>>{
+        val (valid,message) = validation(answer)
+        return if(valid) {
+            if(question.answers.contains(answer.toLowerCase())){
+                question = question.nextQuestion()
+                "Отлично - ты справился\n${question.question}" to status.color
+            }else{
+                if(status == Status.CRITICAL){
+                    question = Question.NAME
+                    status = Status.NORMAL
+                    "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
+                }else {
+                    status = status.nextStatus()
+                    "Это неправильный ответ\n${question.question}" to status.color
+                }
             }
+        }else{
+            "$message\n${question.question}" to status.color
         }
     }
 
