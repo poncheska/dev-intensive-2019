@@ -14,38 +14,46 @@ class Bender(var status:Status = Status.NORMAL,
         Question.IDLE-> Question.IDLE.question
     }
 
-    fun validation(answer: String):Pair<Boolean,String> = when(question){
+    private fun validation(answer: String):Boolean = when(question){
         Question.NAME -> {
-            val valid = answer[0].isUpperCase()
-            valid to "Имя должно начинаться с заглавной буквы"
+            answer[0].isUpperCase()
         }
 
         Question.PROFESSION -> {
-            val valid = answer[0].isLowerCase()
-            valid to "Профессия должна начинаться со строчной буквы"
+            answer[0].isLowerCase()
         }
 
         Question.MATERIAL -> {
-            val valid = !answer.matches(Regex(".*\\d+.*"))
-            valid to "Материал не должен содержать цифр"
+            !answer.matches(Regex(".*\\d+.*"))
         }
 
         Question.BDAY -> {
-            val valid = answer.matches(Regex("\\d+"))
-            valid to "Год моего рождения должен содержать только цифры"
+            answer.matches(Regex("\\d+"))
         }
 
         Question.SERIAL -> {
-            val valid = answer.length == 7 && answer.matches(Regex("\\d+"))
-            valid to "Серийный номер содержит только цифры, и их 7"
+            answer.length == 7 && answer.matches(Regex("\\d+"))
         }
 
-        Question.IDLE -> true to ""
+        Question.IDLE -> true
 
     }
 
+    fun stringsForValidation():String = when(question){
+        Question.NAME -> "Имя должно начинаться с заглавной буквы"
+
+        Question.PROFESSION -> "Профессия должна начинаться со строчной буквы"
+
+        Question.MATERIAL -> "Материал не должен содержать цифр"
+
+        Question.BDAY -> "Год моего рождения должен содержать только цифры"
+
+        Question.SERIAL -> "Серийный номер содержит только цифры, и их 7"
+
+        Question.IDLE -> ""}
+
     fun listenAnswer(answer:String):Pair<String,Triple<Int,Int,Int>>{
-        val (valid,message) = validation(answer)
+        val valid = if(answer.isEmpty()) false else validation(answer)
         return if(valid) {
             if(question.answers.contains(answer.toLowerCase())){
                 question = question.nextQuestion()
@@ -61,7 +69,7 @@ class Bender(var status:Status = Status.NORMAL,
                 }
             }
         }else{
-            "$message\n${question.question}" to status.color
+            "${stringsForValidation()}\n${question.question}" to status.color
         }
     }
 
