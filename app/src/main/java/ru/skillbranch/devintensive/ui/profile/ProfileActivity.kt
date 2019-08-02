@@ -35,9 +35,9 @@ class ProfileActivity : AppCompatActivity() {
         initViewModel()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outState?.putBoolean(IS_EDIT_MODE,isEditMode)
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putBoolean(IS_EDIT_MODE, isEditMode)
     }
 
     private fun initViewModel(){
@@ -59,7 +59,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun initViews(savedInstanceState: Bundle?){
-        isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE,false) ?: false
+        isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE) ?: false
 
         viewFields = mapOf(
             "nickName" to tv_nick_name,
@@ -71,6 +71,8 @@ class ProfileActivity : AppCompatActivity() {
             "rating" to tv_rating,
             "respect" to tv_respect
         )
+
+        showCurrentMode(isEditMode)
 
         btn_edit.setOnClickListener {
             if(isEditMode) saveProfileInfo()
