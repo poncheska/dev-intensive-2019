@@ -20,15 +20,11 @@ class ProfileViewModel: ViewModel() {
         appTheme.value = repository.getAppTheme()
     }
 
-    fun getIsRepoError(): LiveData<Boolean> = isRepoError
-
     fun getProfileData(): LiveData<Profile> {
         return profileData
     }
 
     fun getTheme(): LiveData<Int> = appTheme
-
-    fun getRepositoryError(): LiveData<Boolean> = repositoryError
 
     fun saveProfileData(profile: Profile) {
         repository.saveProfile(profile)
