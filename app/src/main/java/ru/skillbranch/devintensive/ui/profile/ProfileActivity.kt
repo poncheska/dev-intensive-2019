@@ -5,7 +5,6 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 class ProfileActivity : AppCompatActivity() {
@@ -69,6 +69,7 @@ class ProfileActivity : AppCompatActivity() {
                 v.text = it[k].toString()
             }
         }
+        updateAvatar(profile)
     }
 
     fun initViews(savedInstanceState: Bundle?){
@@ -152,6 +153,11 @@ class ProfileActivity : AppCompatActivity() {
         ).apply {
             viewModel.saveProfileData(this)
         }
+    }
+
+    private fun updateAvatar(profile: Profile){
+        val initials = Utils.toInitials(profile.firstName, profile.lastName)
+        iv_avatar.generateAvatar(initials, Utils.convertSpToPx(this, 48), theme)
     }
 
 }
