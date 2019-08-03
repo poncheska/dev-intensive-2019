@@ -67,4 +67,9 @@ class ProfileViewModel: ViewModel() {
         )
         return exceptions.joinToString("|\\b", "\\b")
     }
+
+    fun getIsRepoError():LiveData<Boolean> = isRepoError
+
+    fun getRepositoryError(): LiveData<Boolean> = repositoryError
+
 }
