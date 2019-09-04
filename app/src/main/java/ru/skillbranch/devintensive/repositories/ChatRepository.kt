@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.repositories
 
 import androidx.lifecycle.MutableLiveData
 import ru.skillbranch.devintensive.data.managers.CacheManager
+import ru.skillbranch.devintensive.extensions.shortFormat
 import ru.skillbranch.devintensive.models.data.Chat
 import ru.skillbranch.devintensive.models.data.ChatItem
 import ru.skillbranch.devintensive.utils.DataGenerator
@@ -25,5 +26,24 @@ object ChatRepository {
     fun find(chatId: String): Chat? {
         val find = chats.value!!.indexOfFirst { it.id == chatId }
         return chats.value!!.getOrNull(find)
+    }
+
+    fun getArchiveChatsCount(): Int {
+        return chats.value!!.filter { it.isArchived }.size
+    }
+
+    fun getShortDescription(): String? {
+        return chats.value!!.filter { it.isArchived }.lastOrNull()?.lastMessageShort()?.first ?: "message test"
+    }
+    fun getLastDate(): String? {
+        return chats.value!!.filter { it.isArchived }.lastOrNull()?.lastMessageDate()?.shortFormat() ?: "date test"
+    }
+
+    fun getLastAuthor(): String? {
+        return chats.value!!.filter { it.isArchived }.lastOrNull()?.lastMessageShort()?.second ?: "author test"
+    }
+
+    fun getMessageCount(): Int {
+        return chats.value!!.filter { it.isArchived }.sumBy { a -> a.unreadableMessageCount() }
     }
 }
