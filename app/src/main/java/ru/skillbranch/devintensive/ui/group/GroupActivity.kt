@@ -2,11 +2,14 @@ package ru.skillbranch.devintensive.ui.group
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.children
 import androidx.lifecycle.Observer
@@ -20,6 +23,7 @@ import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.UserItem
 import ru.skillbranch.devintensive.ui.adapters.UserAdapter
 import ru.skillbranch.devintensive.viewmodels.GroupViewModel
+import java.security.AccessController.getContext
 
 class GroupActivity : AppCompatActivity() {
 
@@ -73,6 +77,7 @@ class GroupActivity : AppCompatActivity() {
     private fun initViews() {
         usersAdapter = UserAdapter { viewModel.handleSelectedItem(it.id) }
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        divider.setDrawable(getDrawable(R.drawable.divider))
         with(rv_user_list) {
             adapter = usersAdapter
             layoutManager = LinearLayoutManager(this@GroupActivity)
@@ -107,12 +112,27 @@ class GroupActivity : AppCompatActivity() {
             isCloseIconVisible = true
             tag = user.id
             isClickable = true
-            closeIconTint = ColorStateList.valueOf(Color.WHITE)
+            //closeIconTint = ColorStateList.valueOf(Color.WHITE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                /*chipBackgroundColor = getColorStateList(getChipColor())
+                closeIconTint = getColorStateList(getCloseIconColor())*/
+                chipBackgroundColor = ColorStateList.valueOf(getChipColor())
+                closeIconTint = ColorStateList.valueOf(getCloseIconColor())
+            } else {
+                if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                    chipBackgroundColor = resources.getColorStateList(R.color.color_item_dark)
+                    closeIconTint = resources.getColorStateList(R.color.color_gray)
+                } else {
+                    chipBackgroundColor = resources.getColorStateList(R.color.color_primary_light)
+                    closeIconTint = resources.getColorStateList(R.color.color_item_light)
+                }
+
+            }
 
             //Добавить реализацию для лолипопы
-            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 chipBackgroundColor = ColorStateList.valueOf(getColor(R.color.color_primary_light))
-            }
+            }*/
 
             setTextColor(Color.WHITE)
 
@@ -136,5 +156,16 @@ class GroupActivity : AppCompatActivity() {
         }
 
         users.forEach{(_,v) -> addChipToGroup(v)}
+    }
+
+    private fun getChipColor(): Int {
+        val tv = TypedValue()
+        theme.resolveAttribute(R.attr.colorChip, tv, true)
+        return tv.data
+    }
+    private fun getCloseIconColor(): Int {
+        val tv = TypedValue()
+        theme.resolveAttribute(R.attr.colorChipCloseIcon, tv, true)
+        return tv.data
     }
 }

@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -16,14 +17,17 @@ import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.ui.adapters.ChatAdapter
 import ru.skillbranch.devintensive.ui.adapters.ChatItemTouchHelperCallback
 import ru.skillbranch.devintensive.ui.group.GroupActivity
-import ru.skillbranch.devintensive.viewmodels.ArchiveViewModel
+//import ru.skillbranch.devintensive.viewmodels.ArchiveViewModel
 import ru.skillbranch.devintensive.viewmodels.MainViewModel
+import android.widget.TextView
+import ru.skillbranch.devintensive.viewmodels.ArchiveViewModel
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var viewModel: MainViewModel
-    private lateinit var archiveViewModel: ArchiveViewModel
+    //private lateinit var archiveViewModel: ArchiveViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,19 +64,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViews() {
         chatAdapter = ChatAdapter{
-            Snackbar.make(rv_chat_list, "Click on ${it.title}", Snackbar.LENGTH_LONG).show()
+            val snackbar = Snackbar.make(rv_chat_list, "Click on ${it.title}", Snackbar.LENGTH_LONG)
+            val snackBarView = snackbar.view
+            snackBarView.setBackgroundColor(getPrimaryColor())
+            val textView: TextView = snackBarView.findViewById(com.google.android.material.R.id.snackbar_text)
+            textView.setTextColor(getSnackbarColor())
+            snackbar.show()
         }
         //ДЗ кастом материал декоратор time: 1:13 tutorial 5
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        divider.setDrawable(getDrawable(R.drawable.divider))
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter) {
             viewModel.addToArchive(it.id)
-            chatAdapter.notifyItemChanged(0)
+            //chatAdapter.notifyItemChanged(0)
 
             //ДЗ добавить обработчик отмены добавления time: 1:33 tutorial 5
+            val snackbar = Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title} в архив?", Snackbar.LENGTH_LONG)
+                .setAction("отмена".toUpperCase()) { _ -> viewModel.restoreFromArchive(it.id) }
+            snackbar.setActionTextColor(getAccentColor())
+            val snackBarView = snackbar.view
+            snackBarView.setBackgroundColor(getPrimaryColor())
+            val textView: TextView = snackBarView.findViewById(com.google.android.material.R.id.snackbar_text)
+            textView.setTextColor(getSnackbarColor())
+            snackbar.show()
 
-            Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title} в архив?", Snackbar.LENGTH_LONG)
-                .setAction("Нет") { _ -> viewModel.restoreFromArchive(it.id)}
-                .show()
+
         }
         val touchHelper = ItemTouchHelper(touchCallback)
         touchHelper.attachToRecyclerView(rv_chat_list)
@@ -90,9 +106,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        archiveViewModel = ViewModelProviders.of(this).get(ArchiveViewModel::class.java)
-        archiveViewModel.getChatData().observe(this, Observer { chatAdapter.updateData(it) })
+        //archiveViewModel = ViewModelProviders.of(this).get(ArchiveViewModel::class.java)
+        //archiveViewModel.getChatData().observe(this, Observer { chatAdapter.updateData(it) })
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.getChatData().observe(this, Observer { chatAdapter.updateData(it) })
+    }
+
+    private fun getPrimaryColor(): Int {
+        val tv = TypedValue()
+        theme.resolveAttribute(R.attr.colorPrimary, tv, true)
+        return tv.data
+    }
+
+    private fun getAccentColor(): Int {
+        val tv = TypedValue()
+        theme.resolveAttribute(R.attr.colorAccent, tv, true)
+        return tv.data
+    }
+    private fun getSnackbarColor(): Int {
+        val tv = TypedValue()
+        theme.resolveAttribute(R.attr.colorSnackBarText, tv, true)
+        return tv.data
     }
 }
