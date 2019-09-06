@@ -5,15 +5,21 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.util.TypedValue
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.ChatItem
 import ru.skillbranch.devintensive.ui.adapters.ChatAdapter
 
 
 class ChatItemTouchHelperCallback(
+    val activity: String,
     val adapter: ChatAdapter,
     val swipeListener : (ChatItem) -> Unit
 ): ItemTouchHelper.Callback() {
@@ -72,11 +78,22 @@ class ChatItemTouchHelperCallback(
 
     private fun drawIcon(canvas: Canvas, itemView: View, dX: Float) {
         val icon: Drawable
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            icon = itemView.resources.getDrawable(R.drawable.ic_archive_black_24dp, itemView.context.theme)
-        } else {
-            icon = itemView.resources.getDrawable(R.drawable.ic_archive_black_24dp)
+
+        when(activity) {
+            "archive" -> icon = if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                itemView.resources.getDrawable(R.drawable.ic_unarchive_black_24dp, itemView.context.theme)
+            } else {
+                itemView.resources.getDrawable(R.drawable.ic_unarchive_black_24dp)
+            }
+            else -> icon = if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                itemView.resources.getDrawable(R.drawable.ic_archive_black_24dp, itemView.context.theme)
+            } else {
+                itemView.resources.getDrawable(R.drawable.ic_archive_black_24dp)
+            }
+
         }
+
+
         val iconSize = itemView.resources.getDimensionPixelSize(R.dimen.icon_size)
         val space = itemView.resources.getDimensionPixelSize(R.dimen.spacing_normal_16)
 
@@ -100,16 +117,15 @@ class ChatItemTouchHelperCallback(
             bottom = itemView.bottom.toFloat()
         }
         with(bgPaint) {
-            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                color = itemView.resources.getColor(R.color.color_primary_dark, itemView.context.theme)
-            } else {
-                color = itemView.resources.getColor(R.color.color_primary_dark)
-            }
-            //ДЗ при свайпе прямоугольник должен менять цвет последовательно через промежуточные значения
-
-            canvas.drawRect(bgRect, bgPaint)
+            color = ContextCompat.getColor(App.applicationContext(), if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)R.color.color_accent_night else R.color.color_primary_dark)
         }
+        canvas.drawRect(bgRect, bgPaint)
     }
+}
+
+enum class TypeOfActivity {
+    ARCHIVE_ACTIVITY,
+    MAIN_ACTIVITY
 }
 
 interface ItemTouchViewHolder{

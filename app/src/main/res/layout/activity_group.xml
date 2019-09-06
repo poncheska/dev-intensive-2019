@@ -18,6 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:background="?attr/colorToolbar"
         >
 
         </androidx.appcompat.widget.Toolbar>
@@ -29,6 +30,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_marginTop="?attr/actionBarSize"
+            android:background="?attr/colorSnackBarText"
     >
         <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group"
@@ -61,6 +63,7 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/spacing_normal_16"
             app:srcCompat="@drawable/ic_arrow_forward_black_24dp"
+            app:backgroundTint="?attr/colorAccent"
             android:visibility="invisible"
             android:scaleX="0"
             android:scaleY="0"

@@ -1,4 +1,3 @@
-
 package ru.skillbranch.devintensive.ui.archive
 
 import android.content.Intent
@@ -39,7 +38,7 @@ class ArchiveActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        chatAdapter = ChatAdapter{
+        chatAdapter = ChatAdapter(this){
             val snackbar = Snackbar.make(rv_archive_list, "Click on ${it.title}", Snackbar.LENGTH_LONG)
             val snackBarView = snackbar.view
             snackBarView.setBackgroundColor(getPrimaryColor())
@@ -50,7 +49,7 @@ class ArchiveActivity : AppCompatActivity() {
         //ДЗ кастом материал декоратор time: 1:13 tutorial 5
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         divider.setDrawable(getDrawable(R.drawable.divider))
-        val touchCallback = ChatItemTouchHelperCallback(chatAdapter) {
+        val touchCallback = ChatItemTouchHelperCallback("archive" ,chatAdapter) {
             viewModel.restoreFromArchive(it.id)
             //chatAdapter.notifyItemChanged(0)
 

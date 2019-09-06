@@ -20,6 +20,7 @@ import ru.skillbranch.devintensive.ui.group.GroupActivity
 //import ru.skillbranch.devintensive.viewmodels.ArchiveViewModel
 import ru.skillbranch.devintensive.viewmodels.MainViewModel
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import ru.skillbranch.devintensive.viewmodels.ArchiveViewModel
 
 
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         initToolbar()
         initViews()
         initViewModel()
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        chatAdapter = ChatAdapter{
+        chatAdapter = ChatAdapter(this){
             val snackbar = Snackbar.make(rv_chat_list, "Click on ${it.title}", Snackbar.LENGTH_LONG)
             val snackBarView = snackbar.view
             snackBarView.setBackgroundColor(getPrimaryColor())
@@ -74,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         //ДЗ кастом материал декоратор time: 1:13 tutorial 5
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         divider.setDrawable(getDrawable(R.drawable.divider))
-        val touchCallback = ChatItemTouchHelperCallback(chatAdapter) {
+        val touchCallback = ChatItemTouchHelperCallback("main activity" ,chatAdapter) {
             viewModel.addToArchive(it.id)
             //chatAdapter.notifyItemChanged(0)
 
