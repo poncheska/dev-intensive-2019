@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         initToolbar()
         initViews()
         initViewModel()
